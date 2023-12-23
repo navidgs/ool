@@ -1,0 +1,18 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+require_relative 'commands/mkdir'
+
+options = {}
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: ool COMMAND [OPTIONS]"
+end.parse!
+
+case ARGV[0]
+when 'mkdir'
+  Mkdir.execute(options)
+else
+  puts "Unknown command: #{ARGV[0]}"
+  exit 1
+end
