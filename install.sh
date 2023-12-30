@@ -9,9 +9,13 @@ cd ool
 # Make the main script executable
 chmod +x ool
 
-# Move to a directory in the PATH
-cd ..
-mv ool /usr/local/bin
+# Create a bin directory in your home directory if it doesn't exist
+mkdir -p ~/bin
 
-# Provide feedback to the user
-echo "ool has been installed to /usr/local/bin"
+mv ool ~/bin
+
+echo "OOL CLI tool has been installed to ~/bin"
+
+# add ~/bin to the PATH in your shell profile
+echo 'export PATH="$PATH:~/bin"' >> ~/.zshrc
+
