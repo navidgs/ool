@@ -3,10 +3,22 @@
 require 'optparse'
 require_relative 'commands/mkdir'
 
+VERSION = '1.0.0'
+
 options = {}
 
 OptionParser.new do |opts|
-  opts.banner = "Usage: ool COMMAND [OPTIONS]"
+  opts.banner = 'Usage: ool COMMAND [OPTIONS]'
+
+  opts.on("--version", "Show CLI version") do
+    puts "ool version #{VERSION}"
+    exit
+  end
+
+  opts.on("--update", "Update ool to the latest version from GitHub") do
+    update_script
+    exit
+  end
 end.parse!
 
 case ARGV[0]
@@ -15,4 +27,10 @@ when 'mkdir'
 else
   puts "Unknown command: #{ARGV[0]}"
   exit 1
+end
+
+def update_script
+  current_directory = File.dirname(__FILE__)
+  system("git -C #{current_directory} pull origin main")
+  puts "ool has been updated to the latest version."
 end
