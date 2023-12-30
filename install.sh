@@ -12,6 +12,7 @@ chmod +x ool
 # Create a bin directory in your home directory if it doesn't exist
 mkdir -p ~/bin
 
+cd ..
 mv ool ~/bin
 
 echo "OOL CLI tool has been installed to ~/bin"
