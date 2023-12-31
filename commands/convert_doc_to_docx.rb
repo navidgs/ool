@@ -28,10 +28,13 @@ module ConvertDocToDocx
 
       index += 1
       new_file_path = File.join(output_directory, "#{chosen_file_name}.docx")
+      pdf_file = File.join(output_directory, "#{chosen_file_name}.pdf")
+      convert_to_pdf(file, pdf_file)
+      puts "Converting PDF #{file} to #{pdf_file}".light_blue
 
       if extension == '.doc'
         convert_to_docx(file, new_file_path)
-        puts "Converting #{file} to #{new_file_path}".yellow
+        puts "Converting DOCX #{file} to #{new_file_path}".yellow
       elsif extension == '.docx'
         FileUtils.cp(file, new_file_path)
 
@@ -50,6 +53,10 @@ module ConvertDocToDocx
 
   def self.convert_to_docx(doc_path, docx_path)
     system("unoconv -f docx -o #{docx_path} #{doc_path}")
+  end
+
+  def self.convert_to_pdf(doc_path, pdf_file)
+    system("unoconv -f pdf -o #{pdf_file} #{doc_path}")
   end
 end
 
