@@ -43,7 +43,7 @@ def update_script
   end
 
   # Install missing Homebrew packages
-  install_missing_brew_packages(['unoconv'])
+  install_missing_brew_packages(['unoconv', 'asdf'])
 
   puts "Update completed successfully.".green
 end
