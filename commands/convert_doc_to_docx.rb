@@ -3,10 +3,10 @@ require 'fileutils'
 module ConvertDocToDocx
   def self.execute(options)
     # Check if file_name option is provided
-    unless options[:file_name]
-      puts "Error: Please provide the --file-name option with a value.".red
-      exit 1
-    end
+    # unless options[:file_name]
+    #   puts "Error: Please provide the --file-name option with a value.".red
+    #   exit 1
+    # end
 
     input_directory = Dir.pwd
     output_directory = File.join(input_directory, 'converted_files')
@@ -17,21 +17,22 @@ module ConvertDocToDocx
     index = 0
 
     Dir.glob(File.join(input_directory, '*')).each do |file|
-      # base_name = File.basename(file, '.*')
+      base_name = File.basename(file, '.*')
       extension = File.extname(file).downcase
       new_file_name = generate_filename(options[:file_name], index)
+      # Determine the file name to use based on the presence of options[:file_name]
+      chosen_file_name = options[:file_name] ? new_file_name : base_name
 
       index += 1
+      new_file_path = File.join(output_directory, "#{chosen_file_name}.docx")
 
       if extension == '.doc'
-        converted_file = File.join(output_directory, "#{new_file_name}.docx")
-        convert_to_docx(file, converted_file)
-        puts "Converting #{file} to #{converted_file}".yellow
+        convert_to_docx(file, new_file_path)
+        puts "Converting #{file} to #{new_file_path}".yellow
       elsif extension == '.docx'
-        copied_file = File.join(output_directory, "#{new_file_name}.docx")
-        FileUtils.cp(file, copied_file)
+        FileUtils.cp(file, new_file_path)
 
-        puts "Copying #{file} to #{copied_file}".yellow
+        puts "Copying #{file} to #{new_file_path}".magenta
       else
         index -= 1
       end

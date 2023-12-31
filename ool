@@ -7,7 +7,7 @@ require 'colorize'
 require_relative 'commands/mkdir'
 require_relative 'commands/convert_doc_to_docx'
 
-VERSION = '1.3.0'
+VERSION = '1.4.0'
 
 options = {}
 
