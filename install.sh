@@ -18,5 +18,5 @@ mv ool ~/bin
 echo "OOL CLI tool has been installed to ~/bin"
 
 # add ~/bin to the PATH in your shell profile
-echo 'export PATH="$PATH:$HOME/bin"' >> ~/.zshrc
+echo 'export PATH="$PATH:$HOME/bin/ool"' >> ~/.zshrc
 

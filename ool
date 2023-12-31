@@ -1,35 +1,91 @@
 #!/usr/bin/env ruby
 
 require 'optparse'
+require 'bundler'
+require 'fileutils'
 require_relative 'commands/mkdir'
+require_relative 'commands/convert_doc_to_docx'
 
-VERSION = '1.2.0'
+VERSION = '1.3.0'
 
 options = {}
+
+def install_missing_brew_packages(packages)
+  packages.each do |package|
+    unless brew_package_installed?(package)
+      puts "Installing #{package}..."
+      system("brew install #{package}")
+    else
+      puts "#{package} is already installed."
+    end
+  end
+end
+
+def brew_package_installed?(package)
+  system("brew list #{package} &> /dev/null")
+end
 
 def update_script
   current_directory = File.dirname(__FILE__)
   system("git -C #{current_directory} pull origin main")
   puts "ool has been updated to the latest version."
+
+  # Install gems if there's a Gemfile
+  # gemfile_path = File.join(current_directory, 'Gemfile')
+  # if File.exist?(gemfile_path)
+  #   puts "Installing gems..."
+  #   Bundler.with_unbundled_env do
+  #     system("bundle install --path=#{current_directory}")
+  #   end
+  # else
+  #   puts "No Gemfile found. Skipping gem installation."
+  # end
+
+  # Install missing Homebrew packages
+  install_missing_brew_packages(['unoconv'])
+
+  puts "Update completed successfully."
+end
+
+def display_help
+  puts "Usage: ool COMMAND [OPTIONS]"
+  puts "Available commands:"
+  puts "  convert            convert doc to docx"
+  puts "  --version          Show CLI version"
+  puts "  --update           Update ool to the latest version from GitHub"
+  puts "  --help             Show this help message"
+  puts ""
+  puts "For more details about each command, use 'ool COMMAND --help'"
 end
 
 OptionParser.new do |opts|
   opts.banner = 'Usage: ool COMMAND [OPTIONS]'
 
-  opts.on("--version", "Show CLI version") do
+  opts.on('-v', "--version", "Show CLI version") do
     puts "ool version #{VERSION}"
     exit
   end
 
-  opts.on("--update", "Update ool to the latest version from GitHub") do
+  opts.on('-u', "--update", "Update ool to the latest version from GitHub") do
     update_script
     exit
+  end
+
+  opts.on('-h', "--help", "Show this help message") do
+    display_help
+    exit
+  end
+
+  opts.on('-n', '--name FILE_NAME', 'Specify the file name for the convert command') do |file|
+    options[:file_name] = file
   end
 end.parse!
 
 case ARGV[0]
 when 'mkdir'
   Mkdir.execute(options)
+when 'convert'
+  ConvertDocToDocx.execute(options)
 else
   puts "Unknown command: #{ARGV[0]}"
   exit 1
