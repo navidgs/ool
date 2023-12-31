@@ -45,7 +45,7 @@ module ConvertDocToDocx
   end
 
   def self.generate_filename(base_name, index)
-    "#{base_name}_#{(index + 1).to_s.rjust(3, '0')}"
+    "#{base_name}#{(index + 1).to_s.rjust(3, '0')}"
   end
 
   def self.convert_to_docx(doc_path, docx_path)
