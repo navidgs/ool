@@ -19,6 +19,9 @@ module ConvertDocToDocx
     Dir.glob(File.join(input_directory, '*')).each do |file|
       base_name = File.basename(file, '.*')
       extension = File.extname(file).downcase
+
+      next unless ['.doc', '.docx'].include?(extension)
+
       new_file_name = generate_filename(options[:file_name], index)
       # Determine the file name to use based on the presence of options[:file_name]
       chosen_file_name = options[:file_name] ? new_file_name : base_name
