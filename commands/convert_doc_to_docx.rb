@@ -4,7 +4,7 @@ module ConvertDocToDocx
   def self.execute(options)
     # Check if file_name option is provided
     unless options[:file_name]
-      puts "Error: Please provide the --file-name option with a value."
+      puts "Error: Please provide the --file-name option with a value.".red
       exit 1
     end
 
@@ -26,12 +26,12 @@ module ConvertDocToDocx
       if extension == '.doc'
         converted_file = File.join(output_directory, "#{new_file_name}.docx")
         convert_to_docx(file, converted_file)
-        puts "Converting #{file} to #{converted_file}"
+        puts "Converting #{file} to #{converted_file}".yellow
       elsif extension == '.docx'
         copied_file = File.join(output_directory, "#{new_file_name}.docx")
         FileUtils.cp(file, copied_file)
 
-        puts "Copying #{file} to #{copied_file}"
+        puts "Copying #{file} to #{copied_file}".yellow
       else
         index -= 1
       end

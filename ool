@@ -3,6 +3,7 @@
 require 'optparse'
 require 'bundler'
 require 'fileutils'
+require 'colorize'
 require_relative 'commands/mkdir'
 require_relative 'commands/convert_doc_to_docx'
 
@@ -16,7 +17,7 @@ def install_missing_brew_packages(packages)
       puts "Installing #{package}..."
       system("brew install #{package}")
     else
-      puts "#{package} is already installed."
+      puts "#{package} is already installed.".yellow
     end
   end
 end
@@ -28,23 +29,23 @@ end
 def update_script
   current_directory = File.dirname(__FILE__)
   system("git -C #{current_directory} pull origin main")
-  puts "ool has been updated to the latest version."
+  puts "ool has been updated to the latest version.".green
 
   # Install gems if there's a Gemfile
-  # gemfile_path = File.join(current_directory, 'Gemfile')
-  # if File.exist?(gemfile_path)
-  #   puts "Installing gems..."
-  #   Bundler.with_unbundled_env do
-  #     system("bundle install --path=#{current_directory}")
-  #   end
-  # else
-  #   puts "No Gemfile found. Skipping gem installation."
-  # end
+  gemfile_path = File.join(current_directory, 'Gemfile')
+  if File.exist?(gemfile_path)
+    puts "Installing gems..."
+    Bundler.with_unbundled_env do
+      system("bundle install --path=#{current_directory}")
+    end
+  else
+    puts "No Gemfile found. Skipping gem installation.".yellow
+  end
 
   # Install missing Homebrew packages
   install_missing_brew_packages(['unoconv'])
 
-  puts "Update completed successfully."
+  puts "Update completed successfully.".green
 end
 
 def display_help
@@ -87,6 +88,6 @@ when 'mkdir'
 when 'convert'
   ConvertDocToDocx.execute(options)
 else
-  puts "Unknown command: #{ARGV[0]}"
+  puts "Unknown command: #{ARGV[0]}".light_red
   exit 1
 end
